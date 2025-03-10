@@ -39,7 +39,8 @@ export default function Evenement() {
 
   useEffect(() => {
     //const socket = io("http://localhost:5001");
-    const socket = io(window.location.origin);
+    //const socket = io(window.location.origin);
+    const socket = io(michelin-bike.azurewebsites.net);
     socket.on("metrics_update", (data) => {
       setMetrics(data);
       const timeInterval = 2; // en secondes

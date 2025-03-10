@@ -1,2 +1,27 @@
 michelinWebsite/package-lock.json
-michelinWebsite/node_modules
+michelinWebsite/node_modules# Node.js dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build files
+dist/
+build/
+.vite/
+.cache/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Environment variables
+.env
+.env.local
+.env.development
+.env.production
+
+# Logs
+logs/
+*.log
+

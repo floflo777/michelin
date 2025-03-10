@@ -18,7 +18,8 @@ export default function Trajet() {
 
   useEffect(() => {
     //const socket = io("http://localhost:5001");
-    const socket = io(window.location.origin);
+    //const socket = io(window.location.origin);
+    const socket = io(michelin-bike.azurewebsites.net);
     socket.on("metrics_update", (data) => setTraveledDistance(data.distance));
     return () => socket.close();
   }, []);
