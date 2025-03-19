@@ -16,7 +16,7 @@ export default function Home() {
           { to: "/trajet", label: "Trajet", desc: "Suivez votre itinéraire et votre progression." },
           { to: "/consommation", label: "Consommation Énergétique", desc: "Analysez l'énergie que vous générez." },
           { to: "/data", label: "Tableau de Bord", desc: "Consultez toutes vos métriques en temps réel." },
-          { to: "/donnees-avancees", label: "Données Avancées", desc: "Explorez une analyse plus poussée." },
+          { to: "/Home", label: "Accueil", desc: "Pas si utile que ça finalement..." },
         ].map(({ to, label, desc }, i) => (
           <Link key={i} to={to} className="bg-white p-6 rounded-lg shadow-md border border-gray-200 hover:border-[#FFCD00] transition">
             <h2 className="text-xl font-semibold text-[#001C58]">{label}</h2>

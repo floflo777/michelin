@@ -14,9 +14,9 @@ import {
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
-const TRANSMISSION_RATIO = 3.3; // tours de roue par tour de pédalier
-const WHEEL_CIRCUMFERENCE = 2.1; // en mètres (exemple pour une roue 700c)
-const TIME_INTERVAL = 2; // en secondes, intervalle entre chaque mise à jour
+const TRANSMISSION_RATIO = 3.3; 
+const WHEEL_CIRCUMFERENCE = 2.1; 
+const TIME_INTERVAL = 2; 
 
 export default function Data() {
   const [metrics, setMetrics] = useState({ power: 0, cadence: 0, distance: 0, revolutions: 0, speed: 0 });
@@ -48,13 +48,10 @@ export default function Data() {
   const isFirstUpdate = useRef(true);
 
   useEffect(() => {
-    //const socket = io("http://localhost:5001");
     const socket = io(window.location.origin);
-    //const socket = io("https://michelin-bike.azurewebsites.net");
     socket.on("metrics_update", (data) => {
       let computedSpeed = 0;
       if (isFirstUpdate.current) {
-        // On ignore le calcul lors de la première mise à jour pour éviter des valeurs aberrantes
         isFirstUpdate.current = false;
       } else {
         const revolutionDelta = data.revolutions - prevRevolutionsRef.current;
