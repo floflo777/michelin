@@ -10,7 +10,7 @@ SENSOR_ADDRESS = "B39283B0-F675-456D-E265-9EE860DE185F"
 sio = socketio.Client()
 # Remplace par ton URL, ex. "http://localhost:5001" si tu testes en local,
 # ou "https://michelin-bike.azurewebsites.net" comme dans ton code
-sio.connect("https://michelin-bike.azurewebsites.net")
+sio.connect("https://michelin-delta.vercel.app")
 
 BASE_POWER = 150
 GRADE_AMPLITUDE = 5
