@@ -3,6 +3,7 @@ from flask import Flask, send_from_directory
 from flask_socketio import SocketIO
 
 app = Flask(__name__, static_folder="dist", static_url_path="")
+
 socketio = SocketIO(app, cors_allowed_origins="*", async_mode="eventlet")
 
 @app.route("/")
@@ -24,6 +25,7 @@ def handle_disconnect():
 @socketio.on("metrics_update")
 def handle_metrics_update(data):
     print("📡 Données reçues du capteur :", data)
+    # Rediffuser à tous les clients connectés
     socketio.emit("metrics_update", data)
 
 if __name__ == "__main__":

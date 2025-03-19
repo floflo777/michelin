@@ -53,7 +53,7 @@ function Consommation() {
   }, []);
 
   useEffect(() => {
-    const socket = io(window.location.origin);
+    const socket = io("https://michelin-bike.azurewebsites.net");
     socket.on("metrics_update", (data) => {
       if (!data) return;
       powerRef.current = data.power ?? 0;

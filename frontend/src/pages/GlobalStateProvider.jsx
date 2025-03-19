@@ -3,7 +3,8 @@ import { io } from "socket.io-client";
 
 export const GlobalStateContext = createContext();
 
-const SOCKET_URL = window.location.origin;
+const SOCKET_URL = "https://michelin-bike.azurewebsites.net";
+
 
 export const GlobalStateProvider = ({ children }) => {
   const [metrics, setMetrics] = useState({

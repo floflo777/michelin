@@ -46,7 +46,7 @@ export default function Trajet() {
   }, [isLoaded, startLocation, endLocation, trajetActive]);
 
   useEffect(() => {
-    const socket = io(window.location.origin);
+    const socket = io("https://michelin-bike.azurewebsites.net");
 
     socket.on("metrics_update", (data) => {
       if (typeof data.distance === "number") {
