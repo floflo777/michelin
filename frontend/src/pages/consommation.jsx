@@ -7,10 +7,12 @@ const TIME_INTERVAL = 2;
 const OBJECTIF_KWH = 5;
 
 const COLLECTIVE_MILESTONES = [
-  { threshold: 50, icon: "🌱", title: "Semis plantés" },
-  { threshold: 100, icon: "🌳", title: "Arbres replantés" },
-  { threshold: 200, icon: "🌲", title: "Don effectué" }
+  { threshold: 10, icon: "📱", title: "Charger un telephone" },
+  { threshold: 20, icon: "💡", title: "Allumer une LED pour une session de travail" },
+  { threshold: 30, icon: "☕", title: "Un café à la machine" },
+  { threshold: 40, icon: "🍞", title: "Faire griller un toast le matin" }
 ];
+
 
 function Consommation() {
   const [traveledDistance, setTraveledDistance] = useState(0);
