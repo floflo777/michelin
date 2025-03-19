@@ -6,18 +6,16 @@ import socketio
 from bleak import BleakClient
 from pycycling.cycling_power_service import CyclingPowerService
 
-# Adresse du capteur BLE
 SENSOR_ADDRESS = "B39283B0-F675-456D-E265-9EE860DE185F"
-
-# Connexion au serveur Flask-SocketIO
 sio = socketio.Client()
+# Remplace par ton URL, ex. "http://localhost:5001" si tu testes en local,
+# ou "https://michelin-bike.azurewebsites.net" comme dans ton code
 sio.connect("https://michelin-bike.azurewebsites.net")
 
-# Paramètres de simulation
-BASE_POWER = 150           # Puissance de base (W)
-GRADE_AMPLITUDE = 5        # Amplitude de variation de la pente en %
-SIMULATION_PERIOD = 60     # Période d'oscillation de la pente (s)
-EFFICIENCY = 0.7           # Rendement pour la recharge de la batterie
+BASE_POWER = 150
+GRADE_AMPLITUDE = 5
+SIMULATION_PERIOD = 60
+EFFICIENCY = 0.7
 
 def clear_terminal():
     sys.stdout.write("\033[H\033[J")
@@ -36,13 +34,10 @@ async def connect_to_power_meter():
                 last_crank_revs = None
                 last_crank_time = None
                 total_distance = 0
-                # Calcul du périmètre de la roue (en mètres)
                 wheel_circumference = 622 * 3.1416 / 1000
 
                 def power_callback(data):
                     nonlocal last_crank_revs, last_crank_time, total_distance
-
-                    # Récupération des données du capteur BLE
                     puissance = getattr(data, 'instantaneous_power', 0)
                     cumulative_crank_revs = getattr(data, 'cumulative_crank_revs', 0)
                     last_crank_event_time = getattr(data, 'last_crank_event_time', 0)
@@ -60,13 +55,12 @@ async def connect_to_power_meter():
 
                     elapsed_time = time.time() - time_start
                     grade = GRADE_AMPLITUDE * math.sin(2 * math.pi * elapsed_time / SIMULATION_PERIOD)
-
                     if grade >= 0:
                         target_power = BASE_POWER
-                        power_recharge = 0  # Pas de recharge en montée
+                        power_recharge = 0
                     else:
-                        target_power = BASE_POWER + abs(grade * 10)  # Simulation du frein moteur
-                        power_recharge = EFFICIENCY * (BASE_POWER - target_power)  # Recharge (valeur négative)
+                        target_power = BASE_POWER + abs(grade * 10)
+                        power_recharge = EFFICIENCY * (BASE_POWER - target_power)
 
                     metrics = {
                         "power": puissance,
@@ -85,42 +79,33 @@ async def connect_to_power_meter():
 
                     sio.emit("metrics_update", metrics)
 
-                # Installation du handler pour recevoir les notifications BLE
                 power_service.set_cycling_power_measurement_handler(power_callback)
 
-                # Reste en écoute pendant 150 secondes
-                while time.time() - time_start < 150000:
+                print("Simulation BLE : en écoute indéfiniment (Contrôle-C pour quitter).")
+                while True:
                     await asyncio.sleep(1)
 
-                print("⏹️ Fin du parsing après 150 secondes")
-                return
             else:
                 raise Exception("Capteur non connecté")
+
     except Exception as e:
         print(f"Erreur de connexion au capteur BLE: {e}")
-        print("Utilisation des données de test simulées.")
+        print("Lancement du mode simulation de données illimité (mock).")
 
-        # Simulation de données de test
         last_crank_revs = 0
         total_distance = 0
-        wheel_circumference = 622 * math.pi / 1000  # en mètres
+        wheel_circumference = 622 * math.pi / 1000
         simulated_cumulative_revs = 0
 
-        while time.time() - time_start < 1500:
+        print("Simulation de données illimitée (Contrôle-C pour quitter).")
+        while True:
             await asyncio.sleep(1)
             current_time = time.time()
             elapsed_time = current_time - time_start
-
-            # Simulation d'une augmentation des révolutions (entre 1 et 3 par seconde)
-            delta_revs = 3 + int((math.sin(current_time) + 1) * 1)  # Valeur entre 1 et 3
+            delta_revs = 3 + int((math.sin(current_time) + 1) * 1)
             simulated_cumulative_revs += delta_revs
-
-            # Simulation d'une cadence variant autour de 60 RPM avec de petites fluctuations
             cadence_rpm = 60 + 10 * math.sin(current_time / 5)
-
             total_distance += delta_revs * wheel_circumference
-
-            # Simulation de la puissance fluctuante
             puissance = BASE_POWER + 20 * math.sin(current_time / 3)
             grade = GRADE_AMPLITUDE * math.sin(2 * math.pi * elapsed_time / SIMULATION_PERIOD)
 
@@ -148,49 +133,7 @@ async def connect_to_power_meter():
 
             sio.emit("metrics_update", metrics)
 
-        print("⏹️ Fin de la simulation après 150 secondes")
-
 asyncio.run(connect_to_power_meter())
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -49,8 +49,8 @@ export default function Data() {
 
   useEffect(() => {
     //const socket = io("http://localhost:5001");
-    //const socket = io(window.location.origin);
-    const socket = io("https://michelin-bike.azurewebsites.net");
+    const socket = io(window.location.origin);
+    //const socket = io("https://michelin-bike.azurewebsites.net");
     socket.on("metrics_update", (data) => {
       let computedSpeed = 0;
       if (isFirstUpdate.current) {
